@@ -11,6 +11,8 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	firstRun := true
 
+	items := make([]string, 0)
+
 	for {
 		if firstRun {
 			fmt.Println("Список доступных команд:")
@@ -41,42 +43,54 @@ func main() {
 		}
 
 		cmd := fields[0]
-		items := make([]string, 0)
 
 		switch cmd {
 		case "добавить":
-			switch fieldsLength {
-			case 2:
-				items = append(items, fields[1])
-				fmt.Println("Вы добавили", fields[1])
-			case 3:
-				word1 := fields[1]
-				word2 := fields[2]
+			if fieldsLength == 1 {
+				fmt.Println("Вы не ввели значения, которое нужно добавить")
+				continue
+			}
 
-				items = append(items, word1, word2)
-				fmt.Printf("Вы добавили %s и %s\n", word1, word2)
-			default:
-				var args strings.Builder
+			newItems := fields[1:]
+
+			items = append(items, newItems...)
+
+			if len(newItems) == 1 {
+				fmt.Println("Вы добавили", newItems[0])
+			} else {
+				allButLast := strings.Join(newItems[:len(newItems)-1], ", ")
+				last := newItems[len(newItems)-1]
+				fmt.Printf("Вы добавили %s и %s\n", allButLast, last)
+			}
+		case "удалить":
+			if fieldsLength == 1 {
+				fmt.Println("Вы не ввели значения, которое нужно удалить")
+			} else {
+				var deletedItems []string
 
 				for i := 1; i < fieldsLength; i++ {
-					items = append(items, fields[i])
+					valueToRemove := fields[i]
 
-					switch i {
-					case fieldsLength - 1:
-						args.WriteString(" и ")
-						args.WriteString(fields[i])
-					case fieldsLength - 2:
-						args.WriteString(fields[i])
-					default:
-						args.WriteString(fields[i])
-						args.WriteString(", ")
+					foundIndex := -1
+					for idx, item := range items {
+						if item == valueToRemove {
+							foundIndex = idx
+							break
+						}
+					}
+
+					if foundIndex != -1 {
+						deletedItems = append(deletedItems, valueToRemove)
+						items = append(items[:foundIndex], items[foundIndex+1:]...)
 					}
 				}
 
-				fmt.Println("Вы добавили", args.String())
+				if len(deletedItems) > 0 {
+					fmt.Printf("Вы удалили: %s\n", strings.Join(deletedItems, ", "))
+				} else {
+					fmt.Println("Ни один из указанных элементов не найден в списке")
+				}
 			}
-		case "удалить":
-			fmt.Println("Вы хотите удалить что-то...")
 		case "help":
 			fmt.Println("Команда: help")
 			fmt.Println("--- эта команда выводит список доступных команд")
