@@ -4,8 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
+
+func contains(slice []string, val string) bool {
+	return slices.Contains(slice, val)
+}
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -53,15 +58,23 @@ func main() {
 			}
 
 			newItems := fields[1:]
+			var addedItems []string
 
-			items = append(items, newItems...)
+			for _, item := range newItems {
+				if !contains(items, item) {
+					items = append(items, item)
+					addedItems = append(addedItems, item)
+				}
+			}
 
-			if len(newItems) == 1 {
-				fmt.Println("Вы добавили", newItems[0])
-			} else {
-				allButLast := strings.Join(newItems[:len(newItems)-1], ", ")
-				last := newItems[len(newItems)-1]
+			if len(addedItems) == 1 {
+				fmt.Println("Вы добавили", addedItems[0])
+			} else if len(addedItems) > 1 {
+				allButLast := strings.Join(addedItems[:len(addedItems)-1], ", ")
+				last := addedItems[len(addedItems)-1]
 				fmt.Printf("Вы добавили %s и %s\n", allButLast, last)
+			} else {
+				fmt.Println("Все указанные элементы уже есть в списке")
 			}
 		case "удалить":
 			if fieldsLength == 1 {
@@ -98,7 +111,7 @@ func main() {
 				continue
 			}
 
-			fmt.Printf("Ваш список: \n- %s\n", strings.Join(items, "\n"))
+			fmt.Printf("Ваш список: \n- %s\n", strings.Join(items, "\n- "))
 		case "help":
 			fmt.Println("Команда: help")
 			fmt.Println("--- эта команда выводит список доступных команд")
