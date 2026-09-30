@@ -41,21 +41,26 @@ func main() {
 		}
 
 		cmd := fields[0]
+		items := make([]string, 0)
 
 		switch cmd {
 		case "добавить":
 			switch fieldsLength {
 			case 2:
-				fmt.Println("Вы хотите добавить", fields[1])
+				items = append(items, fields[1])
+				fmt.Println("Вы добавили", fields[1])
 			case 3:
 				word1 := fields[1]
 				word2 := fields[2]
 
-				fmt.Printf("Вы хотите добавить %s и %s\n", word1, word2)
+				items = append(items, word1, word2)
+				fmt.Printf("Вы добавили %s и %s\n", word1, word2)
 			default:
 				var args strings.Builder
 
 				for i := 1; i < fieldsLength; i++ {
+					items = append(items, fields[i])
+
 					switch i {
 					case fieldsLength - 1:
 						args.WriteString(" и ")
@@ -68,7 +73,7 @@ func main() {
 					}
 				}
 
-				fmt.Println("Вы хотите добавить", args.String())
+				fmt.Println("Вы добавили", args.String())
 			}
 		case "удалить":
 			fmt.Println("Вы хотите удалить что-то...")
