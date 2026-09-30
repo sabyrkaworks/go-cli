@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func loopApp(scanner *bufio.Scanner, firstRun bool) {
+func runCLI(scanner *bufio.Scanner, firstRun bool) {
 	for {
 		if firstRun {
 			printIntro()
@@ -39,7 +39,7 @@ func loopApp(scanner *bufio.Scanner, firstRun bool) {
 				continue
 			}
 
-			addedItems := findItemsToAdd(fields)
+			addedItems := addItems(fields)
 			printAddedItems(addedItems)
 		case "удалить":
 			if fieldsLength == 1 {
@@ -47,7 +47,7 @@ func loopApp(scanner *bufio.Scanner, firstRun bool) {
 				continue
 			}
 
-			deletedItems := extractDisallowedItems(fields)
+			deletedItems := removeItems(fields)
 			printDeletedItems(deletedItems)
 		case "список":
 			if len(items) == 0 {

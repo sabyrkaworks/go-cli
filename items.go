@@ -8,7 +8,7 @@ func contains(slice []string, val string) bool {
 	return slices.Contains(slice, val)
 }
 
-func findItemsToAdd(fields []string) []string {
+func addItems(fields []string) []string {
 	newItems := fields[1:]
 	var addedItems []string
 
@@ -22,7 +22,7 @@ func findItemsToAdd(fields []string) []string {
 	return addedItems
 }
 
-func extractDisallowedItems(fields []string) []string {
+func removeItems(fields []string) []string {
 	var deletedItems []string
 
 	for i := 1; i < len(fields); i++ {
