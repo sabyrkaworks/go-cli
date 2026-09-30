@@ -19,6 +19,7 @@ func main() {
 			fmt.Println("- help")
 			fmt.Println("- добавить {яблоко пальто книга}")
 			fmt.Println("- удалить {пальто яблоко}")
+			fmt.Println("- список")
 			fmt.Println("- выйти")
 			fmt.Println()
 
@@ -91,6 +92,13 @@ func main() {
 					fmt.Println("Ни один из указанных элементов не найден в списке")
 				}
 			}
+		case "список":
+			if len(items) == 0 {
+				fmt.Println("Ваш список пуст")
+				continue
+			}
+
+			fmt.Printf("Ваш список: \n- %s\n", strings.Join(items, "\n"))
 		case "help":
 			fmt.Println("Команда: help")
 			fmt.Println("--- эта команда выводит список доступных команд")
